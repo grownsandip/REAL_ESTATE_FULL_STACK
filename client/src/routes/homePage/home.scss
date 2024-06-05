@@ -1,0 +1,63 @@
+@import "../../resposive.scss";
+.home {
+  display: flex;
+  height: 100%;
+  .textContainer {
+    flex: 3;
+    .wrapper {
+      padding-right: 100px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 50px;
+      height: 100%;
+      @include laptops {
+        padding: 0;
+      }
+      @include mobiles {
+        justify-content: flex-start;
+      }
+      .title {
+        font-size: 64px;
+        @include desktops {
+          font-size: 48px;
+        }
+      }
+      .boxes {
+        display: flex;
+        justify-content: space-between;
+        @include mobiles {
+          display: none;
+        }
+        h1 {
+          font-size: 36px;
+          @include desktops {
+            font-size: 32px;
+          }
+        }
+        h2 {
+          font-size: 20px;
+          font-weight: 200;
+        }
+      }
+    }
+  }
+  .imgContainer {
+    flex: 2;
+    background-color: #fcf5f3;
+    position: relative;
+    display: flex;
+    align-items: center;
+    @include laptops {
+      display: none;
+    }
+    img {
+      width: 115%;
+      position: absolute;
+      right: 0;
+      @include desktops {
+        width: 105%;
+      }
+    }
+  }
+}

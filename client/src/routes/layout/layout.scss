@@ -1,0 +1,25 @@
+@import "../../resposive.scss";
+.layout {
+  height: 100vh;
+  max-width: 1366px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 20px;
+  padding-right: 20px;
+  @include desktops {
+   // background-color: rgb(221, 98, 98);
+    max-width: 1280px;
+  }
+  @include laptops {
+    // background-color: rgb(141, 107, 179);
+    max-width: 768px;
+  }
+  @include mobiles {
+    // background-color: blue($color: #6b5656);
+    max-width: 738;
+  }
+  .contents {
+    // background-color: rebeccapurple;
+    height: calc(100vh - 100px);
+  }
+}
