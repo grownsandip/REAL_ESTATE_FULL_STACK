@@ -5,6 +5,7 @@ import Home from "./routes/homePage/Home";
 import SinglePage from "./routes/singlePage/SinglePage";
 import Register from "./routes/register/Register";
 import Login from "./routes/login/Login";
+import ProfilePage from "./routes/profilePage/ProfilePage";
 function App() {
   const router = createBrowserRouter([
     {
@@ -30,6 +31,10 @@ function App() {
        {
         path:"/login",
         element:<Login/>
+       },
+       {
+        path:"/profile",
+        element:<ProfilePage/>
        }
       ]
     }
