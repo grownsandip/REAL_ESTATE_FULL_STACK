@@ -1,56 +1,62 @@
-import "./profilePage.scss"
-import { userData } from "../../lib/dummyData";
+import "./profilePage.scss";
 import List from "../../components/list/List";
 import Chat from "../../components/chat/Chat";
 import apiRequest from "../../lib/apiRequest.js";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useContext} from "react";
+import { AuthContext } from "../../context/AuthContext.jsx";
 function ProfilePage() {
-  const navigate=useNavigate()
-  const handleLogout=async ()=>{
-    try{
-     const res= apiRequest.post("/auth/logout");
-     localStorage.removeItem("user")
-     navigate("/");
+  const { updateUser, currentUser } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const handleLogout = async () => {
+    try {
+      await apiRequest.post("/auth/logout");
+      updateUser(null);
+      navigate("/");
+    } catch (err) {
+      console.log(err);
     }
-    catch(err){
-     console.log(err)
-    }
-  }
+  };
   return (
-    <div className="profilePage">
-      <div className="details">
-        <div className="wrapper">
+      <div className="profilePage">
+        <div className="details">
+          <div className="wrapper">
             <div className="title">
-                <h1>User Information</h1>
-                <button>Upadate Profile</button>
+              <h1>User Information</h1>
+              <Link to="/profile/update">
+              <button>Upadate Profile</button>
+              </Link>
             </div>
             <div className="info">
-                <span>
-                    Avatar:
-                    <img src={userData.img} alt=""/>
-                </span>
-                <span>UserName:{userData.name}</span>
-                <span>Email:{userData.mail}</span>
-                <button onClick={handleLogout}>Logout</button>
+              <span>
+                Avatar:
+                <img
+                  src={currentUser.avatar || "./images/noavatar.png"}
+                  alt=""
+                />
+              </span>
+              <span>UserName:{currentUser.username}</span>
+              <span>Email:{currentUser.email}</span>
+              <button onClick={handleLogout}>Logout</button>
             </div>
             <div className="title">
-                <h1>My List</h1>
-                <button>Create New Posts</button>
+              <h1>My List</h1>
+              <button>Create New Posts</button>
             </div>
-            <List/>
+            <List />
             <div className="title">
-                <h1>Saved Posts</h1>
+              <h1>Saved Posts</h1>
             </div>
-            <List/>
+            <List />
+          </div>
+        </div>
+        <div className="chatContainer">
+          <div className="wrapper">
+            <Chat />
+          </div>
         </div>
       </div>
-      <div className="chatContainer">
-        <div className="wrapper">
-          <Chat/>
-        </div>
-      </div>
-    </div>
-  )
+  );
 }
 
-export default ProfilePage
+export default ProfilePage;
