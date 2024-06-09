@@ -24,7 +24,7 @@ function ProfilePage() {
             <div className="title">
               <h1>User Information</h1>
               <Link to="/profile/update">
-              <button>Upadate Profile</button>
+              <button>Update Profile</button>
               </Link>
             </div>
             <div className="info">

@@ -5,7 +5,6 @@ import "./home.scss";
 import { AuthContext } from "../../context/AuthContext.jsx";
 function Home() {
   const {currentUser}=useContext(AuthContext);
-  console.log(currentUser)
   return (
     <div className="home">
       <div className="textContainer">
