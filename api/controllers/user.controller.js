@@ -15,7 +15,6 @@ export const getUser = async (req, res) => {
     try {
         const user = await prisma.user.findUnique({
             where: { id: id },
-            include:{user:true},
         });
         res.status(200).json(user);
     }
