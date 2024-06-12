@@ -4,11 +4,13 @@ import "./newPostPage.scss";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import apiRequest from "../../lib/apiRequest";
+import { useNavigate } from "react-router-dom";
 
 export default function NewPostPage() {
   const [value, setValue] = useState("");
   const [images, setImages] = useState([]);
   const [error, setError] = useState("");
+  const navigate=useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -39,6 +41,8 @@ export default function NewPostPage() {
           rail: parseInt(inputs.rail),
         },
       });
+      //console.log(res.data.id);
+      navigate("/"+res.data.id);
     } catch (err) {
       console.log(err);
       setError(error);

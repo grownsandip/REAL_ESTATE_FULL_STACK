@@ -32,7 +32,7 @@ export const getPost = async (req, res) => {
 export const addPost = async (req, res) => {
     const body = req.body;
     console.log(body);
-    const tokenUserId = body.userId;
+    const tokenUserId = req.userId;
     console.log(tokenUserId);
     try {
         const newPost = await prisma.post.create({
