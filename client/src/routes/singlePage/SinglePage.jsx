@@ -3,9 +3,10 @@ import Slider from "../../components/slider/Slider";
 import Map from "../../components/map/Map";
 import { singlePostData, userData } from "../../lib/dummyData";
 import { useLoaderData } from "react-router-dom";
+import DOMpurify from "dompurify";
 
 function SinglePage() {
-  const post =useLoaderData();
+  const post = useLoaderData();
   console.log(post);
   return (
     <div className="singlePage">
@@ -23,11 +24,16 @@ function SinglePage() {
                 <div className="price">$ {post.price}</div>
               </div>
               <div className="user">
-                <img src={post.user.img} alt="" />
-                <span>{post.user.name}</span>
+                <img src={post.user.avatar} alt="" />
+                <span>{post.user.username}</span>
               </div>
             </div>
-            <div className="bottom">{post.postDetail.desc}</div>
+            <div
+              className="bottom"
+              dangerouslySetInnerHTML={{
+                __html: DOMpurify.sanitize(post.postDetail.desc),
+              }}
+            ></div>
           </div>
         </div>
       </div>
@@ -39,14 +45,22 @@ function SinglePage() {
               <img src="./images/utilities.png" alt="" />
               <div className="featureText">
                 <span>Utilities</span>
-                <p>Renter is responsible</p>
+                {post.postDetail.utilities === "owner" ? (
+                  <p>Owner is responsible</p>
+                ) : (
+                  <p>Tenant is responsible</p>
+                )}
               </div>
             </div>
             <div className="feature">
               <img src="./images/pets.png" alt="" />
               <div className="featureText">
                 <span>Pet Policy</span>
-                <p>{post.postDetail.pet}</p>
+                {post.postDetail.pet === "allowed" ? (
+                  <p>Pets are allowed</p>
+                ) : (
+                  <p>Pests are not allowed</p>
+                )}
               </div>
             </div>
             <div className="feature">
@@ -78,27 +92,42 @@ function SinglePage() {
               <img src="./images/school.png" alt="" />
               <div className="featureText">
                 <span>School</span>
-                <p>{post.postDetail.school}</p>
+                <p>
+                  {post.postDetail.school > 999
+                    ? post.postDetail.school / 1000 + "km"
+                    : post.postDetail.school + "m"}{" "}
+                  away
+                </p>
               </div>
             </div>
             <div className="feature">
               <img src="./images/bus.png" alt="" />
               <div className="featureText">
                 <span>Bus Stop</span>
-                <p>{post.postDetail.bus}</p>
+                <p>
+                  {post.postDetail.bus > 999
+                    ? post.postDetail.bus / 1000 + "km"
+                    : post.postDetail.bus + "m"}{" "}
+                  away
+                </p>
               </div>
             </div>
             <div className="feature">
               <img src="./images/train.png" alt="" />
               <div className="featureText">
-                <span>{post.postDetail.rail}</span>
-                <p>200m away</p>
+                <span>Railway PLatform</span>
+                <p>
+                  {post.postDetail.rail > 999
+                    ? post.postDetail.rail / 1000 + "km"
+                    : post.postDetail.rail + "m"}{" "}
+                  away
+                </p>
               </div>
             </div>
           </div>
           <p className="title">Location</p>
           <div className="mapContainer">
-            <Map items={[singlePostData]} />
+            <Map items={[post]} />
           </div>
           <div className="buttons">
             <button>

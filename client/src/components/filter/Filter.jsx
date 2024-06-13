@@ -43,7 +43,7 @@ function Filter() {
           <input type="text" id="bedroom" name="bedroom" placeholder="any" />
         </div>
         <button>
-            <img src="/search.png" alt="" />
+            <img src="./images/search.png" alt="" />
         </button>
       </div>
     </div>
