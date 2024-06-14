@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import prisma from "../lib/prisma.js";
 import jwt from "jsonwebtoken";
 export const register = async (req, res) => {
+    console.log(req.body);
     const { username, email, password } = req.body;
 
     if (!username || !email || !password) {
