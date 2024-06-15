@@ -6,6 +6,8 @@ import postRoutes from "./routes/posts.route.js";
 import authRoutes from "./routes/auth.route.js";
 import testRoutes from "./routes/test.route.js";
 import userRoutes from "./routes/user.route.js";
+import chatRoutes from "./routes/chat.route.js";
+import messageRoutes from "./routes/message.route.js";
 dotenv.config();
 const app = express();
 const corsOptions = {
@@ -19,6 +21,8 @@ app.use("/api/user", userRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/test", testRoutes);
+app.use("/api/messages",messageRoutes);
+app.use("/api/chats", chatRoutes);
 app.listen(3000, () => {
     console.log("app is running on port 3000");
 });
