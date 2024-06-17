@@ -1,78 +1,93 @@
-import { useState } from "react";
-import { userData } from "../../lib/dummyData";
+import { useContext, useState } from "react";
+import { format } from "timeago.js";
 import "./chat.scss";
+import { AuthContext } from "../../context/AuthContext";
+import apiRequest from "../../lib/apiRequest";
 
-function Chat() {
-    const [chat,setChat]=useState(true);
+function Chat({ chats }) {
+  const [chat, setChat] = useState(false);
+  const { currentUser } = useContext(AuthContext);
+  const handleOpenChat = async (id, reciever) => {
+    try {
+      const res = await apiRequest("/chats/" + id);
+      setChat({ ...res.data, reciever });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const formData = new FormData(e.target)
+      const text = formData.get("text")
+      if (!text) return;
+      const res = await apiRequest.post("/messages/" + chat.id, { text });
+      setChat((prev) => ({ ...prev, messages: [...prev.messages, res.data] }));
+      e.target.reset();
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <div className="chat">
       <div className="messages">
         <h1>Messages</h1>
-        <div className="message">
-          <img src={userData.img} alt="" />
-          <span>John Doe</span>
-          <p>Lorem ipsum dolor sit amet consectetur adipi...... </p>
-        </div>
-        <div className="message">
-          <img src={userData.img} alt="" />
-          <span>John Doe</span>
-          <p>Lorem ipsum dolor sit amet consectetur adipi...... </p>
-        </div>
-        <div className="message">
-          <img src={userData.img} alt="" />
-          <span>John Doe</span>
-          <p>Lorem ipsum dolor sit amet consectetur adipi </p>
-        </div>
-        <div className="message">
-          <img src={userData.img} alt="" />
-          <span>John Doe</span>
-          <p>Lorem ipsum dolor sit amet consectetur adipi...... </p>
-        </div>
-        <div className="message">
-          <img src={userData.img} alt="" />
-          <span>John Doe</span>
-          <p>Lorem ipsum dolor sit amet consectetur adipi...... </p>
-        </div>
+        {chats?.map((c) => (
+          <div className="message" key={c.id}>
+            <img
+              src={c.reciever.avatar || "./images/noavatar.png"}
+              alt=""
+              style={{
+                backgroundColor: c.seenBy.includes(currentUser.id)
+                  ? "white"
+                  : "#fecd514e",
+              }}
+              onClick={() => handleOpenChat(c.id, c.reciever)}
+            />
+            <span>{c.reciever.username}</span>
+            <p>{c.lastMessage}</p>
+          </div>
+        ))}
       </div>
-     {chat&&(<div className="chatBox">
-        <div className="top">
+      {chat && (
+        <div className="chatBox">
+          <div className="top">
             <div className="user">
-                <img src={userData.img} alt="" />
-                John Doe
+              <img
+                src={chat.reciever.avatar || "./images/noavatar.png"}
+                alt=""
+              />
+              {chat.reciever.username}
             </div>
-            <span className="close" onClick={()=>setChat(null)}>X</span>
-        </div>
-        <div className="center">
-            <div className="chatMessage">
-                <p>Lorem ipsum dolor sit, amet consectetur adipisicin get sit sed cum</p>
-                <span>1 hour ago</span>
-            </div>
-            <div className="chatMessage own">
-                <p>Lorem ipsum dolor sit, amet consectetur adipisicin get sit sed cum</p>
-                <span>1 hour ago</span>
-            </div>
-            <div className="chatMessage">
-                <p>Lorem ipsum dolor sit, amet consectetur adipisicin get sit sed cum</p>
-                <span>1 hour ago</span>
-            </div>
-            <div className="chatMessage own">
-                <p>Lorem ipsum dolor sit, amet consectetur adipisicin get sit sed cum</p>
-                <span>1 hour ago</span>
-            </div>
-            <div className="chatMessage">
-                <p>Lorem ipsum dolor sit, amet consectetur adipisicin get sit sed cum</p>
-                <span>1 hour ago</span>
-            </div>
-            <div className="chatMessage own">
-                <p>Lorem ipsum dolor sit, amet consectetur adipisicin get sit sed cum</p>
-                <span>1 hour ago</span>
-            </div>
-        </div>
-        <div className="bottom">
-            <textarea></textarea>
+            <span className="close" onClick={() => setChat(null)}>
+              X
+            </span>
+          </div>
+          <div className="center">
+            {chat.messages.map((message) => (
+              <div
+                className="chatMessage"
+                key={message.id}
+                style={{
+                  alignSelf:
+                    message.userId === currentUser.id
+                      ? "flex-end"
+                      : "flex-start",
+                  textAlign:
+                    message.userId === currentUser.id ? "right" : "left",
+                }}
+              >
+                <p>{message.text}</p>
+                <span>{format(message.createdAt)}</span>
+              </div>
+            ))}
+          </div>
+          <form className="bottom"onSubmit={handleSubmit}>
+            <textarea name="text"></textarea>
             <button>Send</button>
+          </form>
         </div>
-      </div>)}
+      )}
     </div>
   );
 }

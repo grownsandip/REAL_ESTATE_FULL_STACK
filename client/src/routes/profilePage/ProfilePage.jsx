@@ -7,6 +7,8 @@ import { Suspense, useContext } from "react";
 import { AuthContext } from "../../context/AuthContext.jsx";
 function ProfilePage() {
   const data = useLoaderData();
+ // console.log(data)
+ // console.log(data.chatResponse)
   const { updateUser, currentUser } = useContext(AuthContext);
   const navigate = useNavigate();
   const handleLogout = async () => {
@@ -28,14 +30,6 @@ function ProfilePage() {
               <button>Update Profile</button>
             </Link>
           </div>
-          <Suspense fallback={<p>Loading...</p>}>
-            <Await
-              resolve={data.postResponse}
-              errorElement={<p>erro loading posts!</p>}
-            >
-              {(postResponse) => <List posts={postResponse.data.userPosts} />}
-            </Await>
-          </Suspense>
           <div className="info">
             <span>
               Avatar:
@@ -51,13 +45,21 @@ function ProfilePage() {
               <button>Create New Posts</button>
             </Link>
           </div>
+          <Suspense fallback={<p>Loading...</p>}>
+            <Await
+              resolve={data.postResponse}
+              errorElement={<p>error loading posts!</p>}
+            >
+              {(postResponse) => <List posts={postResponse.data.userPosts} />}
+            </Await>
+          </Suspense>
           <div className="title">
             <h1>Saved Posts</h1>
           </div>
           <Suspense fallback={<p>Loading...</p>}>
             <Await
               resolve={data.postResponse}
-              errorElement={<p>erro loading posts!</p>}
+              errorElement={<p>error loading posts!</p>}
             >
               {(postResponse) => <List posts={postResponse.data.savedPosts} />}
             </Await>
@@ -69,7 +71,7 @@ function ProfilePage() {
         <Suspense fallback={<p>Loading...</p>}>
             <Await
               resolve={data.chatResponse}
-              errorElement={<p>erro loading chats!</p>}
+              errorElement={<p>error loading chats!</p>}
             >
               {(chatResponse) => <Chat chats={chatResponse.data} />}
             </Await>
